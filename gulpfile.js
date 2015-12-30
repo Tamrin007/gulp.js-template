@@ -1,44 +1,43 @@
-var del             = require('del')
-var path            = require('path')
-var gulp            = require('gulp')
-var plumber         = require('gulp-plumber')
-var compass         = require('gulp-compass')
-var minify_css      = require('gulp-minify-css')
-var concat          = require('gulp-concat')
-var webserver       = require('gulp-webserver')
-var run_sequence    = require('run-sequence')
+var del = require('del')
+var path = require('path')
+var gulp = require('gulp')
+var plumber = require('gulp-plumber')
+var compass = require('gulp-compass')
+var minify_css = require('gulp-minify-css')
+var concat = require('gulp-concat')
+var webserver = require('gulp-webserver')
+var run_sequence = require('run-sequence')
 
 var paths = {
-    src:    'src',
-    build:  'build',
-    html:   '',
-    css:    'stylesheets',
-    js:     'javascripts'
+    src: 'src',
+    build: 'build',
+    html: '',
+    css: 'stylesheets',
+    js: 'javascripts'
 }
 
 var src = {
-    root:   paths.src,
-    html:   path.join(paths.src, paths.html),
-    css:    path.join(paths.src, paths.css),
-    js:     path.join(paths.src, paths.js),
+    root: paths.src,
+    html: path.join(paths.src, paths.html),
+    css: path.join(paths.src, paths.css),
+    js: path.join(paths.src, paths.js),
 }
 
 var build = {
-    root:   paths.build,
-    html:   path.join(paths.build, paths.html),
-    css:    path.join(paths.build, paths.css),
-    js:     path.join(paths.build, paths.js),
+    root: paths.build,
+    html: path.join(paths.build, paths.html),
+    css: path.join(paths.build, paths.css),
+    js: path.join(paths.build, paths.js),
 }
 
 var server = {
-    host:   'localhost',
-    port:   '8080'
+    host: 'localhost',
+    port: '8080'
 }
 
 gulp.task('build', function(callback) {
     run_sequence(
-        'clean',
-        ['html', 'compass', 'js', 'bower'],
+        'clean', ['html', 'compass', 'js', 'bower'],
         callback
     )
 })
@@ -59,11 +58,12 @@ gulp.task('clean', function() {
 })
 
 gulp.task('compass', function() {
-    return gulp.src([path.join(src.css, '**/*.scss'), '!'+path.join(src.css, '**/_*.scss')])
+    return gulp.src([path.join(src.css, '**/*.scss'), '!' + path.join(src.css, '**/_*.scss')])
         .pipe(plumber())
         .pipe(compass({
-            css:    build.css,
-            sass:   src.css,
+            css: build.css,
+            sass: src.css,
+            comments: false,
             bundle_exec: true
         }))
         .pipe(minify_css())
