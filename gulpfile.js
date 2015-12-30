@@ -3,7 +3,7 @@ var path = require('path')
 var gulp = require('gulp')
 var plumber = require('gulp-plumber')
 var compass = require('gulp-compass')
-var minify_css = require('gulp-minify-css')
+var cssnano = require('gulp-cssnano')
 var concat = require('gulp-concat')
 var webserver = require('gulp-webserver')
 var run_sequence = require('run-sequence')
@@ -66,7 +66,7 @@ gulp.task('compass', function() {
             comments: false,
             bundle_exec: true
         }))
-        .pipe(minify_css())
+        .pipe(cssnano())
         .pipe(gulp.dest(build.css))
 })
 
