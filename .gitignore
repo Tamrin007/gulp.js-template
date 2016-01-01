@@ -90,5 +90,4 @@ build/
 
 
 ### Other ###
-# Build folder
-build/
+.DS_Store
