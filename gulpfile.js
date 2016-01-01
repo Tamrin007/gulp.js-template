@@ -1,19 +1,21 @@
 var del = require('del')
 var path = require('path')
 var gulp = require('gulp')
-var plumber = require('gulp-plumber')
 var compass = require('gulp-compass')
-var cssnano = require('gulp-cssnano')
 var concat = require('gulp-concat')
-var webserver = require('gulp-webserver')
+var cssnano = require('gulp-cssnano')
+var image = require('gulp-image')
+var plumber = require('gulp-plumber')
 var run_sequence = require('run-sequence')
+var webserver = require('gulp-webserver')
 
 var paths = {
     src: 'src',
     build: 'build',
     html: '',
     css: 'stylesheets',
-    js: 'javascripts'
+    js: 'javascripts',
+    img: 'images'
 }
 
 var src = {
@@ -21,6 +23,7 @@ var src = {
     html: path.join(paths.src, paths.html),
     css: path.join(paths.src, paths.css),
     js: path.join(paths.src, paths.js),
+    img: path.join(paths.src, paths.img)
 }
 
 var build = {
@@ -28,6 +31,7 @@ var build = {
     html: path.join(paths.build, paths.html),
     css: path.join(paths.build, paths.css),
     js: path.join(paths.build, paths.js),
+    img: path.join(paths.build, paths.img)
 }
 
 var server = {
@@ -37,7 +41,7 @@ var server = {
 
 gulp.task('build', function(callback) {
     run_sequence(
-        'clean', ['html', 'compass', 'js', 'bower'],
+        'clean', ['bower', 'compass', 'html', 'image', 'js'],
         callback
     )
 })
@@ -75,6 +79,12 @@ gulp.task('html', function() {
         .pipe(gulp.dest(build.html));
 });
 
+gulp.task('image', function() {
+    gulp.src(path.join(src.img, '**/*'))
+        .pipe(image())
+        .pipe(gulp.dest(build.img))
+});
+
 gulp.task('js', function() {
     return gulp.src(path.join(src.js, '**/*.js'))
         .pipe(concat('all.js'))
@@ -94,6 +104,7 @@ gulp.task('watch', function() {
     gulp.watch(path.join(src.html, '**/*.html'), ['html'])
     gulp.watch(path.join(src.css, '**/*.scss'), ['compass'])
     gulp.watch(path.join(src.js, '**/*.js'), ['js'])
+    gulp.watch(path.join(src.img, '**/*'), ['image'])
 })
 
 gulp.task('webserver', function() {
