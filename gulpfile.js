@@ -63,7 +63,12 @@ gulp.task('clean', function() {
 
 gulp.task('compass', function() {
     return gulp.src([path.join(src.css, '**/*.scss'), '!' + path.join(src.css, '**/_*.scss')])
-        .pipe(plumber())
+        .pipe(plumber({
+            errorHandler: function(err) {
+                console.log(err.messageFormatted);
+                this.emit('end');
+            }
+        }))
         .pipe(compass({
             css: build.css,
             sass: src.css,
